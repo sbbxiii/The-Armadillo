@@ -1,4 +1,4 @@
-# ATmega-TMC2209 Stepper Motor Controller PCB
+# 🛡️ The Armadillo: Custom ATmega328P + TMC2209 Stepper Motor Controller PCB
 
 [![CAD: KiCad 10](https://img.shields.io/badge/EDA-KiCad_10.0.1-blue.svg?style=flat-square&logo=kicad)](https://www.kicad.org/)
 [![MCU: Microchip ATmega328P](https://img.shields.io/badge/MCU-ATmega328P--AU-red.svg?style=flat-square&logo=microchip)](https://www.microchip.com/)
@@ -11,21 +11,22 @@
 
 ## 1. Executive Summary
 
-The **ATmega-TMC2209 Motor Controller** is an open-source, Arduino-compatible motion control PCB designed in **KiCad 10.0.1**. It combines the familiar **Microchip ATmega328P** 8-bit AVR microcontroller with the high-performance **Trinamic TMC2209-LA** silent stepper motor driver on a compact $60.0\text{ mm} \times 60.0\text{ mm}$ two-layer FR-4 board.
+**The Armadillo** is an open-source, Arduino-compatible motion control PCB designed from first principles in **KiCad 10.0.1**. It pairs the reliable **Microchip ATmega328P** 8-bit AVR microcontroller with the high-performance **Trinamic TMC2209-LA** silent bipolar stepper motor driver on a rugged $60.0\text{ mm} \times 60.0\text{ mm}$ 2-layer FR-4 board.
 
-Featuring an onboard **WCH CH340K** USB-to-UART converter with automated DTR reset, this board offers plug-and-play programming directly through the Arduino IDE, PlatformIO, or AVR-GCC. It provides silent stepper execution, sensorless homing via **StallGuard4™**, runtime current control over a single-wire **PD_UART** interface, and hardware RC-filtered sensor/endstop inputs.
+Featuring an onboard **WCH CH340K** USB-to-UART converter with automated DTR auto-reset, The Armadillo provides seamless plug-and-play programming directly through the Arduino IDE, PlatformIO, or AVR-GCC toolchains. Key features include silent stepper motion via **StealthChop2™**, sensorless homing via **StallGuard4™**, dynamic runtime current tuning over a single-wire **PD_UART** interface, and hardware RC-filtered sensor inputs.
 
 ---
 
 ## 2. 3D Raytraced Visualizations
 
-````carousel
-![Isometric 3D Perspective](docs/images/isometric_render.png)
-<!-- slide -->
-![Top View 3D Raytrace](docs/images/top_render.png)
-<!-- slide -->
-![Bottom View Copper Ground Pour](docs/images/bottom_render.png)
-````
+<p align="center">
+  <img src="docs/images/isometric_render.png" alt="The Armadillo 3D Perspective Raytrace" width="90%"><br>
+  <em>Figure 1: Raytraced 3D perspective view of The Armadillo motor controller board showing the ATmega328P core, TMC2209 driver, and screw terminal I/O.</em>
+</p>
+
+| Top View (Silicon, Connectors & SMT Layout) | Bottom View (Solid Ground Return & Driver Thermal Vias) |
+| :---: | :---: |
+| <img src="docs/images/top_render.png" alt="Top View" width="100%"> | <img src="docs/images/bottom_render.png" alt="Bottom View" width="100%"> |
 
 ---
 
@@ -44,16 +45,16 @@ flowchart TD
 
     subgraph MCU_Subsystem ["Microcontroller & Communications"]
         VCC5 --> MCU["ATmega328P-A (TQFP-32)<br/>16.000 MHz Clock"]
-        CH340["CH340K USB-UART (U2)"] <-->|UART RX/TX + DTR Reset| MCU
-        ICSP["6-Pin AVR ISP Header (J1)"] <-->|SPI MOSI/MISO/SCK/RST| MCU
+        CH340["CH340K USB-UART (U2)"] <-->|"UART RX/TX + DTR Reset"| MCU
+        ICSP["6-Pin AVR ISP Header (J1)"] <-->|"SPI MOSI/MISO/SCK/RST"| MCU
         MCU --> LEDS["Power & Diagnostic LEDs<br/>(D1, D2)"]
     end
 
     subgraph Motion_Subsystem ["Silent Motion Control"]
         VMOT --> TMC["Trinamic TMC2209-LA (U3)<br/>Silent Stepper Driver"]
         VCC5 --> TMC
-        MCU -->|M1_STEP / M1_DIR / EN| TMC
-        MCU <-->|PD_UART (Single-Wire)| TMC
+        MCU -->|"M1_STEP / M1_DIR / EN"| TMC
+        MCU <-->|"PD_UART (Single-Wire)"| TMC
         TMC --> SenseRes["Dual 0.11Ω 1210 Sense Resistors<br/>(R13, R14)"]
         TMC --> MotorOut["4-Phase Stepper Terminal (J7)<br/>(A1, A2, B1, B2)"]
     end
@@ -73,7 +74,7 @@ flowchart TD
 | :--- | :--- | :--- |
 | **Board Footprint** | $60.00\text{ mm} \times 60.00\text{ mm}$ | Compact square profile with 3.0 mm radius rounded corners |
 | **Mounting Pattern** | 4× M3 Mounting Holes | Positioned at corners for rigid enclosure mounting |
-| **Layer Stackup** | 2-Layer FR-4 (1.6 mm thickness) | Top signal/routing + solid bottom GND pour |
+| **Layer Stackup** | 2-Layer FR-4 (1.6 mm thickness) | Top signal/routing + solid bottom GND return plane |
 | **Motor Input Voltage ($V_S$)** | **4.75V to 29.0V DC** | Accepts standard 12V or 24V industrial/3D-printer power supplies |
 | **Motor Peak Current** | **2.8A Peak / 2.0A RMS** | Configurable in software via TMC2209 internal registers |
 | **Current Sense Resistors** | Dual $0.11\ \Omega \pm 1\%$ (1210 SMT) | High power dissipation footprint for thermal stability |
@@ -84,7 +85,7 @@ flowchart TD
 
 ---
 
-## 5. Trinamic TMC2209 Key Features
+## 5. Trinamic TMC2209 Key Technologies
 
 1. **StealthChop2™**: Voltage-regulated chopper providing completely silent motor movement at low and medium velocities. Eliminates motor whine.
 2. **SpreadCycle™**: Highly dynamic current control chopper mode that delivers high torque and precise microstepping at high step frequencies.
