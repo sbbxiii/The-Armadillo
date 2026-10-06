@@ -1,0 +1,13 @@
+# KiCad temporary & backup files
+*.kicad_prl
+*-backups/
+*.bck
+*.lck
+*.tmp
+*.bak
+*_saved
+
+# OS files
+.DS_Store
+.AppleDouble
+.LSOverride
